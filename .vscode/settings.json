@@ -1,3 +1,22 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "JUnit-Run",
+      "type": "java",
+      "request": "launch",
+      "mainClass": "",
+      "projectName": "GildedRoseRefractor",
+      "args": [
+        "-ea",
+        "-Djava.library.path=${workspaceFolder}/target/classes",
+        "-cp",
+        "${workspaceFolder}/target/test-classes:${workspaceFolder}/target/classes"
+      ],
+      "group": {
+        "kind": "test",
+        "pattern": "**/Test*"
+      }
+    }
+  ]
 }
