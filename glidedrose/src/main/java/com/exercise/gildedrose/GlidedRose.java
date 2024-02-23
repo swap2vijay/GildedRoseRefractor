@@ -1,72 +1,70 @@
 package com.exercise.gildedrose;
 
-public class GlidedRose {
+import java.util.Arrays;
 
-    // Update the quality , based on the given Items
-    public static void updateQuality(Item[] items) {
+public class GlidedRose { 
+	
+	Item[] items;
 
-        for (Item item : items) {
-            if (!item.name.equals("Sulfuras")) {
-                item.sellIn--;
+    public GlidedRose(Item[] items) {
+        this.items = items;
+    }
 
-                switch (item.name) {
-                    case "Aged Brie":
-                        updateAgedBrie(item);
-                        break;
-                    case "Backstage passes":
-                        updateBackstagePasses(item);
-                        break;
-                    case "Conjured":
-                        updateConjured(item);
-                        break;
-                    default:
-                        updateNormalItem(item);
-                        break;
+    public void updateQuality() {
+        Arrays.asList(items).forEach(item -> {
+            if (!item.name.equals("Sulfuras, Hand of Ragnaros")) {
+                updateItemQuality(item);
+                updateSellIn(item);
+                updateQualityAfterSellByDate(item);
+            }
+        });
+    }
+
+    private void updateItemQuality(Item item) {
+        if (item.name.equals("Aged Brie") || item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
+            increaseQuality(item);
+            if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
+                if (item.sellIn < 11) {
+                    increaseQuality(item);
                 }
+                if (item.sellIn < 6) {
+                    increaseQuality(item);
+                }
+            }
+        } else {
+            decreaseQuality(item);
+        }
+    }
+
+    private void updateSellIn(Item item) {
+        if (!item.name.equals("Sulfuras, Hand of Ragnaros")) {
+            item.sellIn--;
+        }
+    }
+
+    private void updateQualityAfterSellByDate(Item item) {
+        if (item.sellIn < 0) {
+            if (!item.name.equals("Aged Brie")) {
+                if (!item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
+                    decreaseQuality(item);
+                } else {
+                    item.quality = 0;
+                }
+            } else {
+                increaseQuality(item);
             }
         }
     }
 
-    // To update the Normal Item
-    private static void updateNormalItem(Item item) {
-        int qualityChange = (item.sellIn < 0) ? 2 : 1;
-        if (item.quality > 0) {
-            item.quality -= qualityChange;
-        }
-    }
-
-    // To update the AgedBrieItem
-    private static void updateAgedBrie(Item item) {
-        int qualityChange = (item.sellIn < 0) ? 2 : 1;
+    private void increaseQuality(Item item) {
         if (item.quality < 50) {
-            item.quality += qualityChange;
-        }
-
-    }
-
-    // To update the BackstagePasses Item
-    private static void updateBackstagePasses(Item item) {
-        if (item.sellIn < 0) {
-            item.quality = 0;
-        } else if (item.sellIn <= 5) {
-            item.quality += 3;
-        } else if (item.sellIn <= 10) {
-            item.quality += 2;
-        } else {
             item.quality++;
         }
-
-        if (item.quality > 50) {
-            item.quality = 50;
-        }
     }
 
-    // To update the Conjured Item
-    private static void updateConjured(Item item) {
-        int qualityChange = (item.sellIn < 0) ? 4 : 2;
-        if (item.quality > 0) {
-            item.quality -= qualityChange;
+    private void decreaseQuality(Item item) {
+        if (item.quality > 0 && !item.name.equals("Sulfuras, Hand of Ragnaros")) {
+            item.quality--;
         }
-
     }
 }
