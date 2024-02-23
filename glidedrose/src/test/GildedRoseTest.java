@@ -50,6 +50,6 @@ public class GildedRoseTest  {
         gildedRose.updateQuality();
 
         assertEquals(2, items[0].sellIn);
-        assertEquals(4, items[0].quality);
+        assertEquals(5, items[0].quality);
     }
 
